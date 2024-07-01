@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قائمة سفلية مميزة وقابلة للنقل</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f0f0f0; /* خلفية الصفحة */
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        .bottom-nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            cursor: grab;
+            width: 100%; /* تعديل ليمتد العرض على كامل الشاشة */
+        }
+
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #ff9800; /* لون الخلفية البرتقالي */
+            padding: 15px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-top: 3px solid #f57c00; /* لون الحدود */
+            width: 60%;
+            max-width: 400px;
+            border-radius: 15px;
+        }
+
+        .bottom-nav a {
+            text-decoration: none;
+            color: #333; /* لون النص الأساسي */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s, color 0.3s;
+        }
+
+        .bottom-nav a .icon {
+            font-size: 24px;
+            transition: color 0.3s;
+        }
+
+        .bottom-nav a .label {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .bottom-nav a:hover {
+            color: #fff; /* تغيير لون النص عند التحويم */
+            transform: translateY(-5px);
+        }
+
+        .bottom-nav a:hover .icon {
+            color: #fff; /* تغيير لون الأيقونة عند التحويم */
+        }
+
+        .bottom-nav a.active {
+            color: #fff; /* لون النص النشط */
+        }
+
+        .bottom-nav a.active .icon {
+            color: #fff; /* لون الأيقونة النشطة */
+        }
+
+        @media (max-width: 768px) {
+            .bottom-nav {
+                width: 80%; /* تعديل عرض القائمة للشاشات الصغيرة */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <!-- محتوى الصفحة هنا -->
+    </div>
+
+    <div class="bottom-nav-container" id="draggable-nav">
+        <div class="bottom-nav">
+            <a href="#home" class="active">
+                <div class="icon"><i class="fas fa-home"></i></div>
+                <div class="label">الرئيسية</div>
+            </a>
+            <a href="#search">
+                <div class="icon"><i class="fas fa-search"></i></div>
+                <div class="label">بحث</div>
+            </a>
+            <a href="#profile">
+                <div class="icon"><i class="fas fa-user"></i></div>
+                <div class="label">الملف</div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function makeElementDraggable(elmnt) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            elmnt.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+                elmnt.style.cursor = "grabbing";
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+                elmnt.style.cursor = "grab";
+            }
+        }
+
+        makeElementDraggable(document.getElementById("draggable-nav"));
+    </script>
+</body>
+</html>
